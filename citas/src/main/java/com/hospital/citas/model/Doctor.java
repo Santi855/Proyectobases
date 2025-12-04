@@ -1,0 +1,90 @@
+package com.hospital.citas.model;
+
+import jakarta.persistence.*;
+
+import java.time.LocalTime;
+
+@Entity
+@Table(name = "Doctores")
+public class Doctor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_doctor")
+    private Integer idDoctor;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario; // Relación con la tabla Usuarios
+
+    @ManyToOne
+    @JoinColumn(name = "id_especialidad", nullable = false)
+    private Especialidad especialidad;
+
+    @Column(name = "cedula_profesional", unique = true, nullable = false)
+    private String cedulaProfesional;
+
+    @Column(name = "horario_inicio")
+    private LocalTime horarioInicio;
+
+    @Column(name = "horario_fin")
+    private LocalTime horarioFin;
+
+    // ======= Getters y Setters =======
+
+    public Integer getIdDoctor() {
+        return idDoctor;
+    }
+
+    public void setIdDoctor(Integer idDoctor) {
+        this.idDoctor = idDoctor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
+    }
+
+    public String getCedulaProfesional() {
+        return cedulaProfesional;
+    }
+
+    public void setCedulaProfesional(String cedulaProfesional) {
+        this.cedulaProfesional = cedulaProfesional;
+    }
+
+    public LocalTime getHorarioInicio() {
+        return horarioInicio;
+    }
+
+    public void setHorarioInicio(LocalTime horarioInicio) {
+        this.horarioInicio = horarioInicio;
+    }
+
+    public LocalTime getHorarioFin() {
+        return horarioFin;
+    }
+
+    public void setHorarioFin(LocalTime horarioFin) {
+        this.horarioFin = horarioFin;
+    }
+
+    // ======= Helper =======
+    public String getNombreCompleto() {
+        if (usuario != null) {
+            return usuario.getNombre() + " " + usuario.getApellido();
+        }
+        return "Sin nombre";
+    }
+}
