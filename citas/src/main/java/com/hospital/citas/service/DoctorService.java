@@ -11,6 +11,8 @@ import java.util.List;
 @Service
 public class DoctorService {
 
+
+
     @Autowired
     private DoctorRepository doctorRepository;
 
@@ -25,8 +27,18 @@ public class DoctorService {
     public List<Doctor> obtenerDoctoresPorEspecialidad(Integer idEspecialidad) {
         return doctorRepository.findByEspecialidad(idEspecialidad);
     }
+    public Doctor guardar(Doctor doctor) {
+        return doctorRepository.save(doctor);
+    }
 
-
+    public boolean eliminar(Integer idDoctor) {
+        int pendientes = doctorRepository.contarCitasPendientes(idDoctor);
+        if (pendientes > 0) {
+            return false; // no se puede eliminar
+        }
+        doctorRepository.deleteById(idDoctor);
+        return true;
+    }
 
 
 }

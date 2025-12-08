@@ -13,7 +13,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
 
 
-    @Query("SELECT d FROM Doctor d WHERE d.usuario.nombre LIKE %:nombre% OR d.usuario.apellido LIKE %:nombre%")
+    @Query("SELECT d FROM Doctor d WHERE d.usuario.nombre LIKE %:nombre% OR d.usuario.apellido_paterno LIKE %:nombre%")
     List<Doctor> findByNombre(@Param("nombre") String nombre);
 
     @Query(value = "SELECT dbo.fn_doctorDisponible(:idDoctor, :fecha, :hora)", nativeQuery = true)
@@ -24,6 +24,10 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
     @Query("SELECT d FROM Doctor d WHERE d.especialidad.id = :idEspecialidad")
     List<Doctor> findByEspecialidad(Integer idEspecialidad);
     List<Doctor> findByEspecialidad_Id(Integer idEspecialidad);
+
+    @Query("SELECT COUNT(c) FROM Cita c WHERE c.doctor.idDoctor = :idDoctor " +
+            "AND c.estatus IN ('Agendada pendiente de pago', 'Pagada pendiente por atender')")
+    int contarCitasPendientes(Integer idDoctor);
 
 
 

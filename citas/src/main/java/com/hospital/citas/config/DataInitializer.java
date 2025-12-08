@@ -21,11 +21,11 @@ public class DataInitializer {
 
             System.out.println("=== Cargando datos iniciales de HospiCitas ===");
 
-            // ===================== ADMIN =====================
             if (usuarioRepository.findByUsuario("admin") == null) {
                 Usuario admin = new Usuario();
                 admin.setNombre("Admin");
-                admin.setApellido("Principal");
+                admin.setApellido_paterno("Principal");
+                admin.setApellido_materno("Admin");
                 admin.setUsuario("admin");
                 admin.setCorreo("admin@hospital.com");
                 admin.setTelefono("555-000-0000");
@@ -36,11 +36,12 @@ public class DataInitializer {
                 System.out.println("✔ Usuario administrador creado.");
             }
 
-            // ===================== PACIENTE =====================
+
             if (usuarioRepository.findByUsuario("jperez") == null) {
                 Usuario pacienteUsuario = new Usuario();
                 pacienteUsuario.setNombre("Juan");
-                pacienteUsuario.setApellido("Pérez");
+                pacienteUsuario.setApellido_paterno("Pérez");
+                pacienteUsuario.setApellido_materno("Rodriguez");
                 pacienteUsuario.setUsuario("jperez");
                 pacienteUsuario.setCorreo("juan@correo.com");
                 pacienteUsuario.setTelefono("555-111-1111");

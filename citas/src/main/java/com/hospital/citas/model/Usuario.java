@@ -16,7 +16,10 @@ public class Usuario {
     private String nombre;
 
     @Column(nullable = false)
-    private String apellido;
+    private String apellido_paterno;
+
+    @Column(nullable = false)
+    private String apellido_materno;
 
     @Column(name = "usuario", nullable = false, unique = true)
     private String usuario; // <- login
@@ -38,9 +41,13 @@ public class Usuario {
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getApellido() { return apellido; }
-    public void setApellido(String apellido) { this.apellido = apellido; }
+    public String getApellido_paterno() { return apellido_paterno; }
+    public void setApellido_paterno(String apellido_paterno) { this.apellido_paterno = apellido_paterno; }
 
+    public String getApellido_materno() { return apellido_materno; }
+    public void setApellido_materno(String apellido_materno) {
+        this.apellido_materno = apellido_materno;
+    }
     public String getUsuario() { return usuario; }
     public void setUsuario(String usuario) { this.usuario = usuario; }
 

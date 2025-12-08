@@ -83,7 +83,7 @@ public class Doctor {
     // ======= Helper =======
     public String getNombreCompleto() {
         if (usuario != null) {
-            return usuario.getNombre() + " " + usuario.getApellido();
+            return usuario.getNombre() + " " + usuario.getApellido_paterno();
         }
         return "Sin nombre";
     }

@@ -12,4 +12,9 @@ public class AdminController {
     public String home() {
         return "admin/home";
     }
+    @GetMapping("Doctores/crdoctores")
+    public String crdoctores(){
+        return "admin/Doctores/crdoctores";
+    }
+
 }

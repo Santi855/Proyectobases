@@ -127,7 +127,7 @@ public class PacienteHomeController {
             Map<String, Object> map = new HashMap<>();
             map.put("idDoctor", d.getIdDoctor());
             map.put("nombre", d.getUsuario().getNombre());
-            map.put("apellido", d.getUsuario().getApellido());
+            map.put("apellido", d.getUsuario().getApellido_paterno());
             respuesta.add(map);
         }
 

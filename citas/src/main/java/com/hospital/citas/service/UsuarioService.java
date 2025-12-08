@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsuarioService {
 
@@ -23,10 +25,11 @@ public class UsuarioService {
         return usuarioRepository.findByUsuario(usuario);
     }
 
-    public Usuario registrarUsuario(String nombre, String apellido, String correo, String telefono, String usuario, String contrasena, String rol) {
+    public Usuario registrarUsuario(String nombre, String apellido_paterno, String apellido_mateno, String correo, String telefono, String usuario, String contrasena, String rol) {
         Usuario nuevo = new Usuario();
         nuevo.setNombre(nombre);
-        nuevo.setApellido(apellido);
+        nuevo.setApellido_paterno(apellido_paterno);
+        nuevo.setApellido_materno(apellido_mateno);
         nuevo.setCorreo(correo);
         nuevo.setTelefono(telefono);
         nuevo.setUsuario(usuario);
@@ -43,5 +46,8 @@ public class UsuarioService {
         Usuario u = usuarioRepository.findByUsuario(usuario);
         if (u == null) return false;
         return encoder.matches(contrasena, u.getContrasena());
+    }
+    public List<Usuario> findAll() {
+        return usuarioRepository.findAll();   // ✔ Aquí regresamos todos los usuarios
     }
 }

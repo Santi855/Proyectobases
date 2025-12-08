@@ -31,7 +31,8 @@ public class PacienteController {
     @PostMapping("/registrar")
     public String registrarPaciente(
             @RequestParam String nombre,
-            @RequestParam String apellido,
+            @RequestParam String apellido_paterno,
+            @RequestParam String apellido_materno,
             @RequestParam String usuario,
             @RequestParam String contrasena,
             @RequestParam String correo,
@@ -51,7 +52,7 @@ public class PacienteController {
         }
 
         Usuario nuevoUsuario = usuarioService.registrarUsuario(
-                nombre, apellido, correo, telefono, usuario, contrasena, "Paciente");
+                nombre, apellido_paterno, apellido_materno, correo, telefono, usuario, contrasena, "Paciente");
 
         Paciente paciente = new Paciente();
         paciente.setUsuario(nuevoUsuario);
