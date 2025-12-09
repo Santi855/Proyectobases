@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -25,6 +24,9 @@ public class UsuarioService {
         return usuarioRepository.findByUsuario(usuario);
     }
 
+    public Usuario guardar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
     public Usuario registrarUsuario(String nombre, String apellido_paterno, String apellido_mateno, String correo, String telefono, String usuario, String contrasena, String rol) {
         Usuario nuevo = new Usuario();
         nuevo.setNombre(nombre);
