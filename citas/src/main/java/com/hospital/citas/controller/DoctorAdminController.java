@@ -34,7 +34,6 @@ public class DoctorAdminController {
         return "Admin/doctores/crdoctores";
     }
 
-    // 📌 FORM NUEVO DOCTOR
     @GetMapping("/nuevo")
     public String nuevoDoctor(Model model) {
         model.addAttribute("doctor", new Doctor());
@@ -43,14 +42,12 @@ public class DoctorAdminController {
         return "admin/doctores/nuevo";
     }
 
-    // 📌 GUARDAR DOCTOR
     @PostMapping("/guardar")
     public String guardarDoctor(@ModelAttribute Doctor doctor) {
         doctorService.guardar(doctor);
         return "redirect:/admin/doctores";
     }
 
-    // 📌 FORM EDITAR DOCTOR
     @GetMapping("/editar/{id}")
     public String editarDoctor(@PathVariable Integer id, Model model) {
 
@@ -65,14 +62,12 @@ public class DoctorAdminController {
         return "Admin/doctores/editar";
     }
 
-    // 📌 GUARDAR EDICIÓN
     @PostMapping("/actualizar")
     public String actualizarDoctor(@ModelAttribute Doctor doctor) {
         doctorService.guardar(doctor);
         return "redirect:/admin/doctores";
     }
 
-    // 📌 ELIMINAR DOCTOR
     @GetMapping("/eliminar/{id}")
     public String eliminarDoctor(@PathVariable Integer id) {
         doctorService.eliminar(id);
