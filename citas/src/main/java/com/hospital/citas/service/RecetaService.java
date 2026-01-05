@@ -1,5 +1,6 @@
 package com.hospital.citas.service;
 
+<<<<<<< HEAD
 import com.hospital.citas.model.Cita;
 import com.hospital.citas.model.Receta;
 import com.hospital.citas.repository.CitaRepository;
@@ -9,6 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+=======
+import com.hospital.citas.repository.RecetaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
+>>>>>>> b3cee62 (Orden final: archivos movidos a la raiz y limpieza de basura)
 
 @Service
 public class RecetaService {
@@ -16,6 +24,7 @@ public class RecetaService {
     @Autowired
     private RecetaRepository recetaRepository;
 
+<<<<<<< HEAD
     @Autowired
     private CitaRepository citaRepository;
 
@@ -46,3 +55,35 @@ public class RecetaService {
         return recetaRepository.buscarPorPaciente(idPaciente);
     }
 }
+=======
+    /**
+     * Llama al repositorio para ejecutar el SP de generación de receta.
+     * Los 6 parámetros coinciden exactamente con la nueva Query nativa del repositorio.
+     */
+    @Transactional
+    public Integer guardarNuevaReceta(
+        Integer idCita,
+        Integer idDoctor,
+        Integer idPaciente,
+        String diagnostico,
+        String tratamiento,
+        String medicamentos
+    ) {
+        // Ejecuta la query nativa y captura el ID devuelto por el SP
+        return recetaRepository.generarReceta(
+            idCita, 
+            idDoctor, 
+            idPaciente, 
+            diagnostico, 
+            tratamiento, 
+            medicamentos
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<Object[]> obtenerRecetasPorMedico(String cedulaMedico) {
+        // Casteo simple para asegurar el retorno de la lista de objetos
+        return recetaRepository.buscarRecetasPorMedico(cedulaMedico);
+    }
+}
+>>>>>>> b3cee62 (Orden final: archivos movidos a la raiz y limpieza de basura)

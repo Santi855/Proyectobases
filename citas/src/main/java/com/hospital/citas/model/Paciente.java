@@ -10,9 +10,10 @@ public class Paciente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_paciente")
-    private Integer id;
+    private Integer id; // Recuerda que en el HTML de Recetas usamos cita.paciente.id
 
-    @ManyToOne
+    // Cambiado a OneToOne para permitir borrado en cascada
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados de Recetas</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Recetas Emitidas</h1>
+
+    <div th:if="${recetas == null or #lists.isEmpty(recetas)}">
+        <p th:text="${mensaje}">No se encontraron recetas para esa cédula o la búsqueda falló.</p>
+    </div>
+
+    <table th:if="${recetas != null and not #lists.isEmpty(recetas)}">
+        <thead>
+            <tr>
+                <th># Receta</th>
+                <th>Fecha</th>
+                <th>ID Paciente</th>
+                <th>Diagnóstico</th>
+                <th>Tratamiento</th>
+                <th>Medicamentos/Obs.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="receta : ${recetas}">
+                <td th:text="${receta[0]}">NumReceta</td>
+                <td th:text="${receta[1]}">Fecha</td>
+                <td th:text="${receta[2]}">ID_Paciente</td>
+                <td th:text="${receta[4]}">Diagnostico</td>
+                <td th:text="${receta[5]}">Tratamiento</td>
+                <td th:text="${receta[6]}">Medicamentos</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <p><a th:href="@{/doctor/recetas/buscar}">Volver a la Búsqueda</a></p>
+</body>
+</html>

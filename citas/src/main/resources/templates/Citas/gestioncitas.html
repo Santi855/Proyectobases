@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Citas - HospiCitas Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .table-container { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .badge-status { padding: 7px 12px; border-radius: 50px; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+        .status-agendada { background-color: #fff3cd; color: #856404; }
+        .status-finalizada { background-color: #d1e7dd; color: #0f5132; }
+        .status-cancelada { background-color: #f8d7da; color: #842029; }
+        footer { background-color: #212529; color: #adb5bd; padding: 40px 0 20px; margin-top: auto; }
+        .search-box { border-radius: 20px; border: 1px solid #dee2e6; }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/admin/home}">
+            <i class="fas fa-calendar-alt"></i> Panel de Citas
+        </a>
+        <div class="ms-auto d-flex gap-2">
+            <a th:href="@{/admin/home}" class="btn btn-light btn-sm fw-bold">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a th:href="@{/admin/citas/pdf}" class="btn btn-danger btn-sm fw-bold text-white">
+                <i class="fas fa-file-pdf"></i> Reporte PDF
+            </a>
+            <a th:href="@{/admin/citas/nueva}" class="btn btn-success btn-sm fw-bold text-white">
+                <i class="fas fa-plus-circle"></i> Nueva Cita
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 flex-grow-1">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark mb-0">Listado de Consultas</h4>
+        <div class="input-group search-box shadow-sm" style="max-width: 350px;">
+            <span class="input-group-text bg-white border-0"><i class="fas fa-search text-muted"></i></span>
+            <input type="text" id="busquedaInput" class="form-control border-0 ps-0" 
+                   placeholder="Buscar paciente o doctor..." onkeyup="filtrarTabla()">
+        </div>
+    </div>
+
+    <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
+        <i class="fas fa-check-circle me-2"></i> <span th:text="${mensajeExito}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div class="table-container shadow-sm">
+        <table class="table table-hover align-middle mb-0" id="tablaCitas">
+            <thead class="table-dark">
+                <tr>
+                    <th class="ps-4">ID</th>
+                    <th>Fecha y Hora</th>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Estatus</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cita : ${citas}">
+                    <td class="ps-4 fw-bold" th:text="${cita.idCita}"></td>
+                    <td>
+                        <div class="fw-bold text-dark" th:text="${#temporals.format(cita.fechaCita, 'dd/MM/yyyy')}"></div>
+                        <small class="text-muted" th:text="${#temporals.format(cita.horaCita, 'hh:mm a')}"></small>
+                    </td>
+                    <td>
+                        <i class="fas fa-user-circle text-primary me-1"></i>
+                        <span th:text="${cita.paciente?.usuario?.nombre + ' ' + cita.paciente?.usuario?.apellido_paterno}"></span>
+                    </td>
+                    <td>
+                        <span class="text-secondary" th:text="${'Dr. ' + cita.doctor?.usuario?.apellido_paterno}"></span>
+                    </td>
+                    <td>
+                        <span class="badge-status" 
+                              th:classappend="${cita.estatus == 'Finalizada' ? 'status-finalizada' : 
+                                               (cita.estatus == 'Cancelada' ? 'status-cancelada' : 'status-agendada')}"
+                              th:text="${cita.estatus}"></span>
+                    </td>
+                    <td class="text-center">
+                        <div class="d-flex gap-2 justify-content-center align-items-center">
+                            
+                            <a th:if="${cita.estatus == 'Finalizada'}" 
+                               th:href="@{/admin/recetas/nueva/{id}(id=${cita.idCita})}" 
+                               class="btn btn-info btn-sm text-white" title="Generar Receta">
+                                <i class="fas fa-prescription"></i>
+                            </a>
+
+                            <form th:action="@{/admin/citas/cambiar-estatus}" method="post" class="m-0">
+                                <input type="hidden" name="id" th:value="${cita.idCita}">
+                                <select name="nuevoEstatus" class="form-select form-select-sm shadow-sm" onchange="this.form.submit()" style="width: 120px; font-size: 0.8rem;">
+                                    <option value="" disabled selected>Cambiar...</option>
+                                    <option value="Agendada">Agendada</option>
+                                    <option value="Finalizada">Finalizada</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                </select>
+                            </form>
+
+                            <a th:href="@{/admin/citas/eliminar/{id}(id=${cita.idCita})}" 
+                               class="text-danger p-2"
+                               onclick="return confirm('¿Eliminar registro de cita?')">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="sinResultados" style="display: none;">
+                    <td colspan="6" class="text-center py-5 text-muted">
+                        <i class="fas fa-search fa-2x mb-3 d-block"></i>
+                        No se encontraron citas con esos criterios.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <h6 class="text-white fw-bold"><i class="fas fa-hospital-symbol"></i> HospiCitas Pro</h6>
+                <p class="small mb-0 text-muted">Módulo de Gestión de Agenda Médica v2.0</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <p class="small mb-0">© 2026 Todos los derechos reservados.</p>
+                <small class="text-muted">Servicio Conectado: SQL Server</small>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function filtrarTabla() {
+        const input = document.getElementById("busquedaInput");
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById("tablaCitas");
+        const tr = table.getElementsByTagName("tr");
+        let coincidencias = 0;
+
+        for (let i = 1; i < tr.length - 1; i++) {
+            let visible = false;
+            const tdPaciente = tr[i].getElementsByTagName("td")[2];
+            const tdDoctor = tr[i].getElementsByTagName("td")[3];
+
+            if (tdPaciente || tdDoctor) {
+                const txtP = tdPaciente.textContent || tdPaciente.innerText;
+                const txtD = tdDoctor.textContent || tdDoctor.innerText;
+
+                if (txtP.toLowerCase().indexOf(filter) > -1 || txtD.toLowerCase().indexOf(filter) > -1) {
+                    visible = true;
+                    coincidencias++;
+                }
+            }
+            tr[i].style.display = visible ? "" : "none";
+        }
+        document.getElementById("sinResultados").style.display = (coincidencias === 0 && filter !== "") ? "" : "none";
+    }
+</script>
+</body>
+</html>

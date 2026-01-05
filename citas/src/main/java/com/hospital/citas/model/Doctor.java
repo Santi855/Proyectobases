@@ -1,7 +1,6 @@
 package com.hospital.citas.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalTime;
 
 @Entity
@@ -13,9 +12,10 @@ public class Doctor {
     @Column(name = "id_doctor")
     private Integer idDoctor;
 
-    @ManyToOne
+    // Cambiado a OneToOne con Cascade para evitar el error de eliminación
+    @OneToOne(cascade = CascadeType.ALL) 
     @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario; // Relación con la tabla Usuarios
+    private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "id_especialidad", nullable = false)
@@ -31,60 +31,36 @@ public class Doctor {
     private LocalTime horarioFin;
 
     // ======= Getters y Setters =======
+    public Integer getIdDoctor() { return idDoctor; }
+    public void setIdDoctor(Integer idDoctor) { this.idDoctor = idDoctor; }
 
-    public Integer getIdDoctor() {
-        return idDoctor;
-    }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-    public void setIdDoctor(Integer idDoctor) {
-        this.idDoctor = idDoctor;
-    }
+    public Especialidad getEspecialidad() { return especialidad; }
+    public void setEspecialidad(Especialidad especialidad) { this.especialidad = especialidad; }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
+    public String getCedulaProfesional() { return cedulaProfesional; }
+    public void setCedulaProfesional(String cedulaProfesional) { this.cedulaProfesional = cedulaProfesional; }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    public LocalTime getHorarioInicio() { return horarioInicio; }
+    public void setHorarioInicio(LocalTime horarioInicio) { this.horarioInicio = horarioInicio; }
 
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
+    public LocalTime getHorarioFin() { return horarioFin; }
+    public void setHorarioFin(LocalTime horarioFin) { this.horarioFin = horarioFin; }
 
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
-    }
-
-    public String getCedulaProfesional() {
-        return cedulaProfesional;
-    }
-
-    public void setCedulaProfesional(String cedulaProfesional) {
-        this.cedulaProfesional = cedulaProfesional;
-    }
-
-    public LocalTime getHorarioInicio() {
-        return horarioInicio;
-    }
-
-    public void setHorarioInicio(LocalTime horarioInicio) {
-        this.horarioInicio = horarioInicio;
-    }
-
-    public LocalTime getHorarioFin() {
-        return horarioFin;
-    }
-
-    public void setHorarioFin(LocalTime horarioFin) {
-        this.horarioFin = horarioFin;
-    }
-
-    // ======= Helper =======
     public String getNombreCompleto() {
         if (usuario != null) {
             return usuario.getNombre() + " " + usuario.getApellido_paterno();
         }
         return "Sin nombre";
     }
+
+    // ======= Constructores =======
+
+public Doctor() {
+    this.usuario = new Usuario();
+    this.especialidad = new Especialidad();
+}
+
 }

@@ -37,7 +37,23 @@ public class DoctorService {
         usuarioService.guardar(usuario);
         return doctorRepository.save(doctor);
 
+<<<<<<< HEAD
     }
+=======
+    public Doctor guardar(Doctor doctor) {
+        return doctorRepository.save(doctor);
+    }
+
+    public boolean eliminar(Integer idDoctor) {
+        int pendientes = doctorRepository.contarCitasPendientes(idDoctor);
+        if (pendientes > 0) {
+            return false; // no se puede eliminar
+        }
+        doctorRepository.deleteById(idDoctor);
+        return true;
+    }
+
+>>>>>>> b3cee62 (Orden final: archivos movidos a la raiz y limpieza de basura)
 
     public boolean eliminar(Integer idDoctor) {
 

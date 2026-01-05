@@ -9,4 +9,5 @@ public interface ConsultorioRepository extends JpaRepository<Consultorio, Intege
 
     // 🔹 Busca el consultorio asignado a un doctor específico
     Consultorio findByDoctor_IdDoctor(Integer idDoctor);
+  
 }

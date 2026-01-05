@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Recetas Emitidas</title>
+</head>
+<body>
+    <h1>🔍 Historial de Recetas Emitidas</h1>
+    <div th:if="${error}" style="color: red;" th:text="${error}"></div>
+
+    <form th:action="@{/doctor/recetas/resultados}" method="get">
+        <label for="cedula">Cédula Profesional del Médico:</label>
+        <input type="text" id="cedula" name="cedula" required>
+        <button type="submit">Buscar Recetas</button>
+    </form>
+</body>
+</html>
