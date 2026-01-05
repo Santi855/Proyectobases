@@ -1,7 +1,6 @@
 package com.hospital.citas.controller;
 
 import com.hospital.citas.model.Cita;
-import com.hospital.citas.model.Paciente;
 import com.hospital.citas.model.Usuario;
 import com.hospital.citas.service.CitaService;
 import com.hospital.citas.service.UsuarioService;
@@ -10,33 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/doctor")
-public class DoctorHomeController {
+public class DoctorCitasController {
+
     @Autowired
     private CitaService citaService;
 
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/home")
-    public String homeDoctor(HttpSession session, Model model) {
+    @GetMapping("/doctor/citas")
+    public String verCitasDoctor(HttpSession session, Model model) {
 
-        Usuario usuario = usuarioService.obtenerUsuarioActual(session);
-        Paciente paciente = new Paciente();
+        Usuario doctor = usuarioService.obtenerUsuarioActual(session);
 
-        if (usuario == null || !usuario.getRol().equals("Doctor")) {
+        if (doctor == null || !doctor.getRol().equals("Doctor")) {
             return "redirect:/login";
         }
 
-        List<Cita> citas = citaService.obtenerCitasPorDoctor(usuario.getId());
+        List<Cita> citas = citaService.obtenerCitasPorDoctor(doctor.getId());
 
         model.addAttribute("citas", citas);
-        model.addAttribute("usuario", usuario);
 
         return "Doctor/home";
     }

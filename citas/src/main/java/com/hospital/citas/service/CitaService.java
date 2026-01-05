@@ -56,6 +56,13 @@ public class CitaService {
         return horas;
     }
 
+    public List<Cita> obtenerCitasPorDoctor(Integer idDoctor) {
+        return citaRepository.findByDoctor(idDoctor);
+    }
+    public List<Cita> obtenerHistorialPaciente(Integer idPaciente) {
+        return citaRepository.obtenerHistorialPaciente(idPaciente);
+    }
+
 
 
 
@@ -101,5 +108,25 @@ public class CitaService {
         cita.setEstatus("Agendada pendiente de pago");
 
         cita.setFechaRegistro(LocalDateTime.now());
+    }
+
+    public Cita buscarPorId(Integer id) {
+        return citaRepository.findById(id).orElse(null);
+    }
+
+    public void marcarNoAsistio(Integer idCita) {
+        Cita cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setEstatus("NO_ASISTIO");
+            citaRepository.save(cita);
+        }
+    }
+
+    public void marcarAtendida(Integer idCita) {
+        Cita cita = buscarPorId(idCita);
+        if (cita != null) {
+            cita.setEstatus("ATENDIDA");
+            citaRepository.save(cita);
+        }
     }
 }

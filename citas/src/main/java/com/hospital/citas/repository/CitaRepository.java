@@ -12,6 +12,7 @@ import java.util.List;
 public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
 
+
     @Query(value = "SELECT dbo.fn_doctorDisponible(:idDoctor, :fecha, :hora)", nativeQuery = true)
     Boolean doctorDisponible(
             @Param("idDoctor") Integer idDoctor,
@@ -35,4 +36,25 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             @Param("idDoctor") Integer idDoctor,
             @Param("fecha") String fecha
     );
+    @Query("""
+        SELECT c
+        FROM Cita c
+        WHERE c.doctor.usuario.id = :idDoctor
+        ORDER BY c.fechaCita, c.horaCita
+    """)
+    List<Cita> findByDoctor(@Param("idDoctor") Integer idDoctor);
+
+
+
+    @Query("""
+        SELECT c
+        FROM Cita c
+        WHERE c.paciente.id = :idPaciente
+        ORDER BY c.fechaCita DESC
+    """)
+    List<Cita> obtenerHistorialPaciente(@Param("idPaciente") Integer idPaciente);
+
+
+
+
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Receta Médica</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg border-0">
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">🩺 Nueva Receta Médica</h4>
+        </div>
+
+        <!-- BODY -->
+        <div class="card-body">
+
+            <!-- INFO DE LA CITA -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <strong>Paciente:</strong><br>
+                    <span th:text="${cita.paciente.usuario.nombre}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Fecha de la cita:</strong><br>
+                    <span th:text="${cita.fechaCita}"></span>
+                </div>
+                <div class="col-md-4">
+                    <strong>Hora:</strong><br>
+                    <span th:text="${cita.horaCita}"></span>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- FORM -->
+            <form th:action="@{/doctor/receta/guardar}"
+                  th:object="${receta}"
+                  method="post">
+
+                <!-- CAMPOS OCULTOS -->
+                <input type="hidden" th:field="*{cita.idCita}">
+                <input type="hidden" th:field="*{doctor.idDoctor}">
+                <input type="hidden" th:field="*{paciente.id}">
+
+                <!-- DIAGNOSTICO -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Diagnóstico</label>
+                    <textarea class="form-control"
+                              rows="3"
+                              th:field="*{diagnostico}"
+                              placeholder="Ingrese el diagnóstico del paciente"
+                              required></textarea>
+                </div>
+
+                <!-- TRATAMIENTO -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tratamiento</label>
+                    <textarea class="form-control"
+                              rows="3"
+                              th:field="*{tratamiento}"
+                              placeholder="Indique el tratamiento a seguir"
+                              required></textarea>
+                </div>
+
+                <!-- OBSERVACIONES -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Medicamentos / Observaciones</label>
+                    <textarea class="form-control"
+                              rows="4"
+                              th:field="*{observaciones}"
+                              placeholder="Medicamentos, dosis, indicaciones adicionales"></textarea>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="d-flex justify-content-end gap-2">
+                    <a th:href="@{/doctor/home}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        Guardar y Generar Folio
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

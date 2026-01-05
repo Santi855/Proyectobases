@@ -21,6 +21,8 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
+
+
     public Doctor buscarPorId(Integer id) {
         return doctorRepository.findById(id).orElse(null);
     }
@@ -50,7 +52,7 @@ public class DoctorService {
         }
 
         Usuario usuario = doctor.getUsuario();
-        usuario.setRol("Paciente");
+        usuario.setRol("Doctor Inactivo");
 
         usuarioService.guardar(usuario);
 
