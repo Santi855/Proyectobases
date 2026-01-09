@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Ticket de Pago</title>
+</head>
+<body>
+
+    <h1>💰 Emitir Ticket de Pago</h1>
+    <p>Ingrese el ID de la cita para calcular el total (consulta + servicios).</p>
+
+    <div id="resultadoTotal" style="margin-bottom: 20px;"></div>
+
+    <form onsubmit="return obtenerTotal(event)">
+        <label for="idCitaInput">ID de la Cita:</label>
+        <input type="number" id="idCitaInput" name="idCita" required>
+        <button type="submit">Calcular Total y Emitir Ticket</button>
+    </form>
+
+    <script>
+        function obtenerTotal(event) {
+            event.preventDefault(); // Evita que la página se recargue
+
+            var idCita = document.getElementById('idCitaInput').value;
+            
+            // Llama al Controller: /recepcionista/calcularTotal
+            fetch('/recepcionista/calcularTotal?idCita=' + idCita)
+                .then(response => {
+                    if (!response.ok) {
+                        // Si el servidor devuelve un error 500 o similar
+                        return response.text().then(text => { throw new Error(text) });
+                    }
+                    return response.text(); 
+                })
+                .then(data => {
+                    // Muestra el resultado (Ej: "El total a pagar es: $850.50")
+                    document.getElementById('resultadoTotal').innerHTML = 
+                        '<p style="color: green; font-size: 1.2em;">' + data + '</p>';
+                })
+                .catch(error => {
+                    // Muestra el error de la DB (Ej: Cita no encontrada)
+                    document.getElementById('resultadoTotal').innerHTML = 
+                        '<p style="color: red;">Error: ' + error.message.substring(0, 100) + '...</p>';
+                });
+            return false;
+        }
+    </script>
+</body>
+</html>

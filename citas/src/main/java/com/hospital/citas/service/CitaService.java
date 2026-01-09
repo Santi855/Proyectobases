@@ -7,7 +7,8 @@ import com.hospital.citas.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List; // Importar List
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -110,6 +111,7 @@ public class CitaService {
         cita.setFechaRegistro(LocalDateTime.now());
     }
 
+<<<<<<< HEAD
     public Cita buscarPorId(Integer id) {
         return citaRepository.findById(id).orElse(null);
     }
@@ -128,5 +130,12 @@ public class CitaService {
             cita.setEstatus("ATENDIDA");
             citaRepository.save(cita);
         }
+=======
+
+    @Transactional(readOnly = true)
+    public List<Object[]> obtenerCitasPorDoctor(Integer idDoctor) {
+        // El repositorio debe tener el método buscarCitasPorDoctor(Integer)
+        return citaRepository.buscarCitasPorDoctor(idDoctor);
+>>>>>>> b3cee62 (Orden final: archivos movidos a la raiz y limpieza de basura)
     }
 }

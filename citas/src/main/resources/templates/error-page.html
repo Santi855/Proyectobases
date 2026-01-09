@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error del Sistema</title>
+    <style>
+        body { font-family: Arial, sans-serif; color: #333; margin: 40px; }
+        .error-box { border: 1px solid red; padding: 20px; background-color: #ffe0e0; }
+        h1 { color: red; }
+    </style>
+</head>
+<body>
+    <div class="error-box">
+        <h1>❌ Ocurrió un Error</h1>
+        <p>Hubo un problema al procesar su solicitud o al acceder a la base de datos.</p>
+        
+        <div th:if="${error}">
+            <strong>Detalle del Error:</strong>
+            <p th:text="${error}"></p>
+        </div>
+        
+        <p><a href="/">Volver a la Página Principal</a></p>
+    </div>
+</body>
+</html>

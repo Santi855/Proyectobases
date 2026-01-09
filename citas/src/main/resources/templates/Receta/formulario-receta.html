@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Generar Nueva Receta - HospiCitas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">✍️ Generación de Receta Médica</h2>
+            </div>
+            <div class="card-body">
+                
+                <div th:if="${mensajeError}" class="alert alert-danger" th:text="${mensajeError}"></div>
+
+                <form th:action="@{/doctor/generar-receta}" method="POST">
+                    
+                    <h4 class="text-primary border-bottom pb-2">Datos de Identificación</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label font-weight-bold">ID de la Cita:</label>
+                            <input type="number" class="form-control bg-secondary text-white" 
+                                   id="citaId" name="citaId" th:value="${idCita}" readonly>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label font-weight-bold">ID del Doctor:</label>
+                            <input type="number" class="form-control bg-secondary text-white" 
+                                   id="doctorId" name="doctorId" th:value="${idDoctor}" readonly>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label class="form-label font-weight-bold">ID del Paciente:</label>
+                            <input type="number" class="form-control bg-secondary text-white" 
+                                   id="pacienteId" name="pacienteId" th:value="${idPaciente}" readonly>
+                        </div>
+                    </div>
+
+                    <h4 class="text-primary border-bottom pb-2">Detalles Médicos</h4>
+
+                    <div class="mb-3">
+                        <label for="diagnostico" class="form-label">Diagnóstico:</label>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control" rows="3" 
+                                  placeholder="Describa el diagnóstico médico..." required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tratamiento" class="form-label">Tratamiento (General):</label>
+                        <textarea id="tratamiento" name="tratamiento" class="form-control" rows="3" 
+                                  placeholder="Indicaciones generales de descanso, dieta, etc." required></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="medicamentos" class="form-label">Medicamentos, Dosis y Duración:</label>
+                        <textarea id="medicamentos" name="medicamentos" class="form-control" rows="4" 
+                                  placeholder="Ej: Paracetamol 500mg - Cada 8 horas por 3 días" required></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a th:href="@{/doctor/citas/dashboard(doctorId=${idDoctor})}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary btn-lg">💾 Guardar y Finalizar Receta</button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,91 @@
+package com.hospital.citas.controller;
+
+import com.hospital.citas.model.Doctor;
+import com.hospital.citas.model.Usuario;
+import com.hospital.citas.model.Especialidad;
+import com.hospital.citas.service.DoctorService;
+import com.hospital.citas.service.UsuarioService;
+import com.hospital.citas.service.EspecialidadService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/admin/doctores")
+public class DoctorAdminController {
+
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private EspecialidadService especialidadService;
+
+    @GetMapping("")
+    public String listarDoctores(Model model) {
+        model.addAttribute("doctores", doctorService.findAll());
+        return "admin/Doctores/crdoctores";
+    }
+
+    @GetMapping("/nuevo")
+    public String nuevoDoctor(Model model) {
+        model.addAttribute("usuarios", usuarioService.findAll());
+        model.addAttribute("especialidades", especialidadService.findAll());
+        return "admin/Doctores/nuevo";
+    }
+
+    @PostMapping("/guardar")
+    public String guardarDoctor(@RequestParam("id_u") String idU,
+                                @RequestParam("id_e") String idE) {
+        Doctor d = new Doctor();
+        
+        Usuario u = new Usuario();
+        u.setId(Integer.parseInt(idU));
+        d.setUsuario(u);
+        
+        Especialidad e = new Especialidad();
+        e.setId(Integer.parseInt(idE));
+        d.setEspecialidad(e);
+        
+        doctorService.guardar(d);
+        return "redirect:/admin/doctores";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editarDoctor(@PathVariable Integer id, Model model) {
+        model.addAttribute("doctor", doctorService.buscarPorId(id));
+        model.addAttribute("usuarios", usuarioService.findAll());
+        model.addAttribute("especialidades", especialidadService.findAll());
+        return "admin/Doctores/editar";
+    }
+
+    @PostMapping("/actualizar")
+    public String actualizarDoctor(@RequestParam("id_d") String idD,
+                                   @RequestParam("id_u") String idU,
+                                   @RequestParam("id_e") String idE) {
+        Doctor d = new Doctor();
+        d.setIdDoctor(Integer.parseInt(idD));
+        
+        Usuario u = new Usuario();
+        u.setId(Integer.parseInt(idU));
+        d.setUsuario(u);
+        
+        Especialidad e = new Especialidad();
+        e.setId(Integer.parseInt(idE));
+        d.setEspecialidad(e);
+        
+        doctorService.guardar(d);
+        return "redirect:/admin/doctores";
+    }
+
+    @GetMapping("/eliminar/{id}")
+    public String eliminarDoctor(@PathVariable Integer id) {
+        doctorService.eliminar(id);
+        return "redirect:/admin/doctores";
+    }
+}

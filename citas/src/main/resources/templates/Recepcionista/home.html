@@ -28,6 +28,40 @@
     </div>
 </div>
 
+<div id="calculo-ticket">
+    <h2>Emitir Ticket de Pago</h2>
+    <label for="idCitaInput">ID de la Cita:</label>
+    <input type="number" id="idCitaInput" required>
+    <button onclick="obtenerTotal()">Calcular Total y Emitir Ticket</button>
+    <p id="resultadoTotal"></p>
+</div>
+
+<script>
+    function obtenerTotal() {
+        var idCita = document.getElementById('idCitaInput').value;
+        
+        if (!idCita) {
+            alert("Por favor, ingrese un ID de Cita.");
+            return;
+        }
+
+        // Hacemos una llamada AJAX (Fetch) al Controller
+        fetch('/recepcionista/calcularTotal?idCita=' + idCita)
+            .then(response => {
+                // El controller devuelve un String simple, lo leemos como texto
+                return response.text(); 
+            })
+            .then(data => {
+                // Mostramos el resultado en el párrafo
+                document.getElementById('resultadoTotal').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('resultadoTotal').innerText = 'Ocurrió un error de conexión.';
+            });
+    }
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

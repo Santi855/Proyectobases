@@ -65,4 +65,16 @@ public class Usuario {
 
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+
+
+        @Column(name = "activo")
+private boolean activo = true; // Por defecto todos nacen activos
+
+// Getter y Setter
+public boolean isActivo() { return activo; }
+public void setActivo(boolean activo) { this.activo = activo; }
+
+
+
+
 }

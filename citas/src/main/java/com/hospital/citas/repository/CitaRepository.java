@@ -3,8 +3,11 @@ package com.hospital.citas.repository;
 import com.hospital.citas.model.Cita;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
-
+import java.util.List;
+import org.springframework.data.repository.query.Param;
+import java.util.List; // Importar List
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -36,6 +39,7 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
             @Param("idDoctor") Integer idDoctor,
             @Param("fecha") String fecha
     );
+<<<<<<< HEAD
     @Query("""
         SELECT c
         FROM Cita c
@@ -57,4 +61,22 @@ public interface CitaRepository extends JpaRepository<Cita, Integer> {
 
 
 
+=======
+    @Procedure(procedureName = "SP_MostrarCitasPorDoctor")
+    List<Object[]> buscarCitasPorDoctor(
+        @Param("IdDoctor") Integer idDoctor
+    );
+
+
+    List<Cita> findAllByPaciente_Id(Integer pacienteId);
+
+   
+// Cambiamos SUM(c.costo) por COUNT(c) para evitar el error
+@Query("SELECT c.especialidad.nombre, COUNT(c) FROM Cita c GROUP BY c.especialidad.nombre")
+    List<Object[]> countCitasByEspecialidad();
+
+    // Consulta 2: Ranking de doctores por cantidad de citas (Para evitar el error de 'costo')
+    @Query("SELECT c.doctor.usuario.nombre, COUNT(c) FROM Cita c GROUP BY c.doctor.usuario.nombre")
+    List<Object[]> findRankingDoctores();
+>>>>>>> b3cee62 (Orden final: archivos movidos a la raiz y limpieza de basura)
 }

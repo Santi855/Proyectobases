@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Citas Pendientes y Atendidas</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h1>📋 Citas Asignadas (Pendientes y Atendidas)</h1>
+    
+    <div th:if="${citas.empty}">
+        <p>No tiene citas pendientes o atendidas en este momento.</p>
+    </div>
+
+    <table th:unless="${citas.empty}">
+        <thead>
+            <tr>
+                <th>ID Cita</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>ID Paciente</th>
+                <th>Costo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cita : ${citas}">
+                <td th:text="${cita[0]}">ID Cita</td>
+                <td th:text="${cita[1]}">Fecha</td>
+                <td th:text="${cita[2]}">Hora</td>
+                <td th:text="${cita[3]}">Estado</td>
+                <td th:text="${cita[4]}">ID Paciente</td>
+                <td th:text="${cita[5]}">Costo</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <p><a href="/doctor/dashboard">Volver al Dashboard</a></p>
+
+</body>
+</html>
