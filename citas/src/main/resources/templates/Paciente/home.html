@@ -12,10 +12,69 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">HospiCitas</span>
-        <a href="/" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
+
+        <span class="navbar-brand">HospiCitas</span>
+
+
+
+        <div class="d-flex align-items-center">
+            <a th:href="@{/farmacia}" class="btn btn-outline-light btn-sm w-100">Farmacia</a>
+
+
+            <!-- Carrito -->
+            <div class="dropdown me-3" th:if="${carrito != null}">
+                <button class="btn btn-outline-light dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown">
+                    🛒 Carrito
+                    <span class="badge bg-warning text-dark"
+                          th:text="${carrito != null and carrito.items != null ? #lists.size(carrito.items) : 0}">
+</span>
+
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-end p-3" style="min-width: 300px;">
+
+                    <li th:if="${carrito.items == null or #lists.isEmpty(carrito.items)}"
+                        class="text-center text-muted">
+                        Carrito vacío
+                    </li>
+
+
+                    <li th:each="item : ${carrito.items}">
+                        <div class="d-flex justify-content-between">
+                            <span th:text="${item.descripcion}"></span>
+                            <strong>$<span th:text="${item.precio}"></span></strong>
+                        </div>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li class="d-flex justify-content-between">
+                        <strong>Total</strong>
+                        <strong>$<span th:text="${carrito != null ? carrito.total : 0}"></span>
+                        </strong>
+                    </li>
+
+                    <li class="mt-2 text-center">
+                        <a href="/Paciente/carrito"
+                           class="btn btn-success btn-sm w-100">
+                            Ver carrito
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <a href="/" class="btn btn-outline-light btn-sm">
+                Cerrar sesión
+            </a>
+
+
+        </div>
     </div>
 </nav>
+
 
 <div class="container mt-5">
 
@@ -111,6 +170,7 @@
                 <th>Fecha</th>
                 <th>Hora</th>
                 <th>Estatus</th>
+                <th>Pagos</th>
             </tr>
             </thead>
 
@@ -121,6 +181,14 @@
                 <td th:text="${c.fechaCita}"></td>
                 <td th:text="${c.horaCita}"></td>
                 <td th:text="${c.estatus}"></td>
+                <td>
+                    <a th:if="${c.estatus == 'Agendada pendiente de pago'}"
+                       th:href="@{/Paciente/carrito/agregar-cita/{id}(id=${c.idCita})}"
+                       class="btn btn-success btn-sm">
+                        Pagar
+                    </a>
+                </td>
+
             </tr>
             </tbody>
         </table>
@@ -163,6 +231,8 @@
             });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 
